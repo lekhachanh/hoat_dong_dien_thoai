@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    function Mobile(battery, status) {
+        this.battery = battery;
+        this.message = [];
+        this.received = [];
+        this.sent = [];
+        this.status = status;
+        this.mobileOn = function () {
+            if (this.status) {
+                return "on";
+            }
+            return  "Off";
+        };
+        this.turnOn = function () {
+            this.status = true;
+        };
+        this.turnOff = function () {
+            this.status = false;
+        };
+        this.chargeBattery = function () {
+            if ( this.battery === 100) {
+                return "Mobile is full battery";
+            }
+            this.battery ++;
+            return this.battery;
+        };
+        this.composeMsg = function (message) {
+            if (this.status) {
+                this.message.unshift(message);
+                this.battery--;
+            }
+        };
+        this.receivedMsg = function (mobile) {
+            if (this.status) {
+                this.received.unshift(mobile.message.shift());
+                this.battery--;
+            }
+        };
+        this.sentMsg = function (mobile) {
+            if (this.status) {
+                mobile.received.unshift(this.message.shift());
+                this.battery--;
+            }
+        };
+        this.inbox = function () {
+            if(this.status) {
+                document.write("Received<br>");
+                for(let i = 0; i<this.received.length; i++) {
+                    document.write(this.received[i]);
+                }
+                this.battery--;
+            }
+        };
+        this.sented = function () {
+            if(this.status){
+                document.write("Sented<br>");
+                for(let i = 0;i<this.sent.length; i++) {
+                    document.write(this.sent[i]);
+                }
+                this.battery--;
+            }
+        };
+    }
+    let nokia = new Mobile(10,true);
+    let iphone = new Mobile(100,true);
+    nokia.composeMsg("Hello");
+    nokia.sentMsg(iphone);
+    iphone.inbox();
+</script>
+</body>
+</html>
